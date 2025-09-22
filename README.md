@@ -1,5 +1,9 @@
 # Pinyinizer
 
+This fork only adds 
+- traditional character detection (I'm pretty sure theres some gaps, will fix later) 
+- v3 manifest support + use newer APIs (since chrome killed v2 manifest support)
+
 Pinyinizer is a Chrome extension that offers a functionality to detect 汉字 (Hanzi) on a webpage and
 annotate them with corresponding 拼音 (Pinyin) as ruby.
 You can find and install the extension at:
