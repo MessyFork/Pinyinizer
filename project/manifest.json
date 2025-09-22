@@ -3,7 +3,7 @@
 
   "name": "Pinyinizer",
   "description": "Annotate Hanzi (汉字) on the page with ruby.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "permissions": [
     "activeTab"
   ],
