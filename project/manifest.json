@@ -21,7 +21,8 @@
 
   "content_scripts": [{
     "matches": ["https://*/*", "http://*/*"],
-    "js": ["src/script.js", "src/jquery-3.2.1.min.js"]
+    "js": ["src/script.js"],
+    "css": ["src/styles.css"]
   }],
 
   "background": {

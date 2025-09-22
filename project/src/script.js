@@ -34,7 +34,7 @@ function pinyinize(elem, hanziList) {
 /**
  * Recursively search elements to be pinyinized in the given DOM, and replace
  * them with elements containing ruby tags.
- * @param {Object} elem - The jQuery object that will be analized.
+ * @param {Element} elem - The DOM element that will be analyzed.
  * @param {object} hanziList - The json object containing Hanzis as keys and
  *                             the corresponding pinyins as values.
  */
@@ -44,12 +44,12 @@ function recursiveReplace(elem, hanziList) {
 
     /**
      * Check if the element contains any exceptional elements.
-     * @param {Object} elem - The jQuery object that will be checked.
+     * @param {Element} elem - The DOM element that will be checked.
      */
     function containsExceptionalElement(elem) {
         for (var i = 0; i < exceptions.length; i++) {
             var exception = exceptions[i];
-            if (elem.find(exception).length !== 0) {
+            if (elem.querySelector(exception) !== null) {
                 return true;
             }
         }
@@ -58,45 +58,42 @@ function recursiveReplace(elem, hanziList) {
 
     /**
      * Check if the element is one of exceptional elements.
-     * @param {Object} elem - The jQuery object that will be checked.
+     * @param {Element} elem - The DOM element that will be checked.
      */
     function isException(elem) {
-        for (var i = 0; i < exceptions.length; i++) {
-            var exception = exceptions[i];
-            if (elem.is(exception)) {
-                return true;
-            }
-        }
-        return false;
+        var tagName = elem.tagName.toLowerCase();
+        return exceptions.includes(tagName);
     }
 
     if (containsExceptionalElement(elem)) {
         // Recursively search and replace the children.
-        var children = elem.children()
+        var children = elem.children;
         for (var i = 0; i < children.length; i++) {
             var child = children[i];
-            recursiveReplace($(child), hanziList);
+            recursiveReplace(child, hanziList);
         }
     } else if (isException(elem)) {
         return;
     } else {
         // Found a element to be pinyinized.
-        var html = elem.html();
+        var html = elem.innerHTML;
         var pinyinized = pinyinize(html, hanziList);
-        elem.html(pinyinized);
+        elem.innerHTML = pinyinized;
     }
 }
 
 
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
     if (msg.action && msg.action === 'pinyinize') {
-        $.getJSON(chrome.runtime.getURL('/resources/hanzi.json'), function(hanziList) {
-            var body = $('body');
-            if (body.attr('pinyinized')) {
-              return;
-            }
-            recursiveReplace(body, hanziList);
-            body.attr('pinyinized', true);
-        });
+        fetch(chrome.runtime.getURL('/resources/hanzi.json'))
+            .then(function(response) { return response.json(); })
+            .then(function(hanziList) {
+                var body = document.body;
+                if (body.getAttribute('pinyinized')) {
+                    return;
+                }
+                recursiveReplace(body, hanziList);
+                body.setAttribute('pinyinized', 'true');
+            });
     }
 });

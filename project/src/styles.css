@@ -1,0 +1,16 @@
+/* Prevent ruby text (pinyin) from being selected */
+rt {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Prevent ruby text from showing selection highlight */
+rt::selection {
+  background: transparent;
+}
+
+rt::-moz-selection {
+  background: transparent;
+}
