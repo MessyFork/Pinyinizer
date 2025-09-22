@@ -90,7 +90,7 @@ function recursiveReplace(elem, hanziList) {
 
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
     if (msg.action && msg.action === 'pinyinize') {
-        $.getJSON(chrome.extension.getURL('/resources/hanzi.json'), function(hanziList) {
+        $.getJSON(chrome.runtime.getURL('/resources/hanzi.json'), function(hanziList) {
             var body = $('body');
             if (body.attr('pinyinized')) {
               return;
